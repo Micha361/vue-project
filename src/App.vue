@@ -13,9 +13,7 @@ import TournamentsSoon from './components/TournamentsSoon.vue';
       <header class="header">
         <TournamentsSoon />
       </header>
-      <div class="content">
-        <router-view></router-view> 
-      </div>
+
     </main>
   </div>
 </template>
