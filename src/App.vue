@@ -1,22 +1,55 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from './components/HelloWorld.vue';
+import navbar from './components/navbar.vue';
 </script>
 
 <template>
-<h1>hello world</h1>
+  <div id="app">
+    <navbar />
+    <main class="content">
+      <header class="header">
+        <h1>Hello</h1>
+      </header>
+
+    </main>
+  </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.content {
+  margin-left: 250px; 
+  padding: 1rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.header h1 {
+  margin: 0;
+}
+
+.account-link {
+  text-decoration: none;
+  color: #00bcd4;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
 }
 </style>
