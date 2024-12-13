@@ -13,6 +13,7 @@ import TournamentsSoon from './components/TournamentsSoon.vue';
       <header class="header">
         <TournamentsSoon />
       </header>
+      <HelloWorld />
 
     </main>
   </div>
