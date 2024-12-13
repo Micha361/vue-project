@@ -1,6 +1,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue';
 import navbar from './components/navbar.vue';
+import TournamentsSoon from './components/TournamentsSoon.vue';
+
 </script>
 
 <template>
@@ -8,7 +10,7 @@ import navbar from './components/navbar.vue';
     <navbar />
     <main class="content">
       <header class="header">
-        <h1>Hello</h1>
+        <TournamentsSoon />
       </header>
 
     </main>
