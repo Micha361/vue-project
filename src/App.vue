@@ -3,6 +3,7 @@ import HelloWorld from './components/HelloWorld.vue';
 import navbar from './components/navbar.vue';
 import TournamentsSoon from './components/TournamentsSoon.vue';
 
+
 </script>
 
 <template>
@@ -12,7 +13,9 @@ import TournamentsSoon from './components/TournamentsSoon.vue';
       <header class="header">
         <TournamentsSoon />
       </header>
-
+      <div class="content">
+        <router-view></router-view> 
+      </div>
     </main>
   </div>
 </template>
