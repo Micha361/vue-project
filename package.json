@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "airtable": "^0.12.2",
     "vue": "^3.5.13"
   },
   "devDependencies": {

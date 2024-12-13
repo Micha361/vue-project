@@ -2,31 +2,29 @@
 import { ref, onMounted } from 'vue';
 import { fetchUser } from '../Api/request.js';
 
-const users = ref([]);
+
+const User = ref([]);
 const loading = ref(true);
 
 onMounted(async () => {
-    await load();
-});
+    load();
+})
 
-onMounted(async () => {
-    await load();
-    console.log('Geladene User:', users.value); 
-});
-
-
-async function load() {
-    loading.value = true;
+async function load()
+{
+    loading.value = true
     try {
-        const data = await fetchUser();
-        users.value = data.records;en
-        console.log('Daten geladen:', users.value);
+        const data = await fetchUser()
+        User.value = data.records 
+        console.log('Stream geladen', User.value)
     } catch (error) {
-        console.error('Fehler beim Laden der Daten:', error);
+        console.error(error)
     } finally {
-        loading.value = false;
+        loading.value = false
     }
 }
+
+
 </script>
 
 <template>
@@ -42,18 +40,19 @@ async function load() {
           <th>Passwort</th>
           <th>Role</th>
           <th>StartDate</th>
-          <th>EndDate</th>
+          <th>Enddate</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <td>{{ user.fields.UserId }}</td>
-          <td>{{ user.fields.UserName  }}</td> 
-          <td>{{ user.fields.UserMail  }}</td> 
-          <td>{{ user.fields.UserPassword  }}</td> 
-          <td>{{ user.fields.fk_RoleId  }}</td> 
+        <tr v-for="user in User" :key="User.id">
+          <td>{{ user.Userid }}</td>
+          <td>{{ user.fields.Username }}</td> 
+          <td>{{ user.fields.UserMail }}</td> 
+          <td>{{ user.fields.UserPassword }}</td> 
+          <td>{{ user.fields.fk_RoleId }}</td> 
           <td>{{ user.fields.StartDate }}</td> 
           <td>{{ user.fields.EndDate }}</td> 
+
         </tr>
       </tbody>
     </table>
@@ -68,7 +67,7 @@ async function load() {
   margin: 25px 0;
   font-size: 18px;
   text-align: left;
-  color: #ff0000; /* Textfarbe weiß */
+  color: #ffffff; /* Textfarbe weiß */
 }
 .styled-table thead tr {
   background-color: #1e88e5; /* Blau für Header */

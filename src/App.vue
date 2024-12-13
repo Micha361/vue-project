@@ -10,7 +10,7 @@ import navbar from './components/navbar.vue';
       <header class="header">
         <h1>Hello</h1>
       </header>
-
+      <HelloWorld />
     </main>
   </div>
 </template>
