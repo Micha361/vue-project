@@ -1,4 +1,7 @@
 <script setup>
+
+mounted() {
+    console.log('HelloWorld component has been mounted!');}
  </script>
 
 <template>
