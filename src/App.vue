@@ -2,6 +2,7 @@
 import Navbar from './components/Navbar.vue';
 import TournamentsSoon from './components/TournamentsSoon.vue';
 import { RouterView } from 'vue-router';
+import Home from './views/Home.vue';
 </script>
 
 <template>
