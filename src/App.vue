@@ -1,20 +1,15 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue';
-import navbar from './components/navbar.vue';
+import Navbar from './components/Navbar.vue';
 import TournamentsSoon from './components/TournamentsSoon.vue';
-
-
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
   <div id="app">
-    <navbar />
+    <Navbar />
+    <Sidebar />
     <main class="content">
-      <header class="header">
-        <TournamentsSoon />
-      </header>
-      <HelloWorld />
-
+      <RouterView />
     </main>
   </div>
 </template>
