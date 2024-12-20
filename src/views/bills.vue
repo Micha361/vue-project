@@ -1,12 +1,11 @@
 <script setup>
-import navbar from '../components/navbar.vue';
  </script>
 
 <template>
-  <navbar />
     <div class="users-page">
-      <h1>Users Page</h1>
-      <p>Welcome to the Users page!</p>
+      <h1>Bills Page</h1>
+      <p>Welcome to the Bills page!</p>
+      <p>Here you can look at your bills.</p>
     </div>
   </template>
   
