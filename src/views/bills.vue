@@ -1,6 +1,6 @@
 <script setup>
 
-mounted() {
+mounted(); {
     console.log('HelloWorld component has been mounted!');}
  </script>
 
