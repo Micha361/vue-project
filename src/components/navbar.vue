@@ -8,6 +8,10 @@
         <li><router-link to="/">Home</router-link></li>
         <li><router-link to="/users">Users</router-link></li> 
         <li><router-link to="/bills">Bills</router-link></li> 
+        <li><a href="#">Tournament</a></li>
+        <li><a href="#">Training Plan</a></li>
+        <li><a href="#">Account</a></li>
+        <li><a href="#">Sign Out</a></li>
       </ul>
     </nav>
   </aside>
