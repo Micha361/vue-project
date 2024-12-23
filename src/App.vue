@@ -1,5 +1,5 @@
 <script setup>
-import Navbar from './components/Navbar.vue';
+import Navbar from './components/navbar.vue';
 import TournamentsSoon from './components/TournamentsSoon.vue';
 import { RouterView } from 'vue-router';
 import Home from './views/Home.vue';
