@@ -3,11 +3,9 @@
 
 <template>
     <div class="users-page">
-      <h1>Home Page</h1>
-      <p>Welcome to the Home page!</p>
+      <h1>Training-Plan Page</h1>
+      <p>Welcome to the Training-Plan page!</p>
     </div>
   </template>
   
 
-
-  
