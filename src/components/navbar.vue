@@ -11,11 +11,22 @@
         <li><router-link to="/Tournament">Tournament</router-link></li> 
         <li><router-link to="/Plan">Training-Plan</router-link></li> 
         <li><router-link to="/Account">Account</router-link></li> 
-        <li><a href="#">Sign Out</a></li>
+        <li><button @click="signOut">Sign Out</button></li>
       </ul>
     </nav>
   </aside>
 </template>
+
+<script>
+export default {
+  methods: {
+    signOut() {
+      localStorage.removeItem('loggedIn'); 
+      this.$router.push('/login'); 
+    },
+  },
+};
+</script>
     
 <style scoped>
 .sidebar {
