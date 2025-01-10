@@ -32,6 +32,7 @@ async function load() {
 <template>
   <div>
       <h1>Userliste von API</h1>
+      <button>add user</button>
       <div v-if="loading">Loading...</div>
       <table v-else class="styled-table">
       <thead>
@@ -43,6 +44,7 @@ async function load() {
           <th>Role</th>
           <th>StartDate</th>
           <th>EndDate</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -54,6 +56,7 @@ async function load() {
           <td>{{ user.fields.fk_RoleId  }}</td> 
           <td>{{ user.fields.StartDate }}</td> 
           <td>{{ user.fields.EndDate }}</td> 
+          <td><button>delete</button></td> 
         </tr>
       </tbody>
     </table>
