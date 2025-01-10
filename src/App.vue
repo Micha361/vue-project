@@ -1,18 +1,43 @@
 <script setup>
 import Navbar from './components/navbar.vue';
-import TournamentsSoon from './components/TournamentsSoon.vue';
 import { RouterView } from 'vue-router';
 </script>
 
 <template>
   <div id="app">
-    <Navbar />
+    <Navbar v-if="isLoggedIn" />
     <Sidebar />
     <main class="content">
       <RouterView />
     </main>
   </div>
 </template>
+
+<script>
+export default {
+  components: {
+    Navbar,
+  },
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  mounted() {
+    this.checkLoginStatus();
+  },
+  methods: {
+    checkLoginStatus() {
+      this.isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+    },
+  },
+  watch: {
+    $route() {
+      this.checkLoginStatus();
+    },
+  },
+};
+</script>
 
 <style scoped>
 .content {
