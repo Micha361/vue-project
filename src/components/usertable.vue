@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchUser } from '../Api/request.js';
+import { fetchUser, deleteUser } from '../Api/request.js';
 
 const users = ref([]);
 const loading = ref(true);
@@ -13,21 +13,38 @@ async function load() {
     loading.value = true;
     try {
         const data = await fetchUser();
-        // Überprüfen, ob Daten vorhanden sind
-        users.value = data.records.filter(user => {
-            return user.fields.UserId && 
-                   user.fields.UserName && 
-                   user.fields.UserMail && 
-                   user.fields.UserPassword &&
-                   user.fields.fk_RoleId &&
-                   user.fields.StartDate &&
-                   user.fields.EndDate;
-        });
-        console.log('Gefilterte Daten:', users.value);
+        users.value = data.records
+            .filter(user => {
+                return user.fields.UserId && 
+                       user.fields.UserName && 
+                       user.fields.UserMail && 
+                       user.fields.UserPassword &&
+                       user.fields.fk_RoleId &&
+                       user.fields.StartDate &&
+                       user.fields.EndDate;
+            })
+            .map(record => ({
+                id: record.id,
+                fields: record.fields,
+            }));
+        console.log('Gefilterte Daten mit Record IDs:', users.value);
     } catch (error) {
         console.error('Fehler beim Laden der Daten:', error);
     } finally {
         loading.value = false;
+    }
+}
+
+async function handleDelete(recordId, userName) {
+    try {
+        const confirmed = confirm(`Möchtest du den Benutzer ${userName} wirklich löschen?`);
+        if (!confirmed) return;
+
+        await deleteUser(recordId);
+        users.value = users.value.filter(user => user.id !== recordId);
+        console.log(`Benutzer mit ID ${recordId} gelöscht.`);
+    } catch (error) {
+        console.error('Fehler beim Löschen:', error);
     }
 }
 </script>
@@ -35,7 +52,7 @@ async function load() {
 <template>
   <div>
       <h1>Userliste von API</h1>
-      <button>add user</button>
+      <button @click="addUser">add user</button>
       <div v-if="loading">Loading...</div>
       <table v-else class="styled-table">
       <thead>
@@ -59,7 +76,11 @@ async function load() {
           <td>{{ user.fields.fk_RoleId }}</td> 
           <td>{{ user.fields.StartDate }}</td> 
           <td>{{ user.fields.EndDate }}</td> 
-          <td><button>delete</button></td> 
+          <td>
+            <button 
+            class="delete-button" 
+            @click="handleDelete(user.id, user.fields.UserName)">Delete</button>
+          </td> 
         </tr>
       </tbody>
     </table>
@@ -67,7 +88,6 @@ async function load() {
 </template>
 
 <style>
-/* Dein Style bleibt gleich */
 .styled-table {
   width: 100%;
   border-collapse: collapse;
