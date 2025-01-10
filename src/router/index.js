@@ -6,12 +6,18 @@ import Tournament from '../views/Tournament.vue';
 import Plan from '../views/Plan.vue';
 import Account from '../views/Account.vue';
 import Login from '../views/login.vue'; 
+import Signup from '../views/signup.vue'; 
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup,
   },
   {
     path: '/',

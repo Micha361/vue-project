@@ -7,7 +7,7 @@
           name="email"
           id="email"
           v-model="username"
-          placeholder="Email eingeben"
+          placeholder="Email wählen"
         />
       </span>
       <span class="input-span">
@@ -17,13 +17,22 @@
           name="password"
           id="password"
           v-model="password"
-          placeholder="Passwort eingeben"
+          placeholder="Passwort wählen"
         />
       </span>
-      <span class="span"><a href="#">Forgot password?</a></span>
-      <input class="submit" type="submit" value="Log in" />
+      <span class="input-span">
+        <label for="password-confirm" class="label">confirm Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          v-model="password"
+          placeholder="Passwort wählen"
+        />
+      </span>
+      <input class="submit" type="submit" value="sign up" />
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      Don't have an account? <router-link class="link" to="/signup">Sign up</router-link>
+      Already have an account? <router-link class="link" to="/login">Sign in</router-link>
     </form>
   </template>
   
@@ -54,9 +63,9 @@
   
   <style scoped>
   .link {
-    text-decoration: none;
-    color: var(--clr);
-  }
+        text-decoration: none;
+        color: var(--clr);
+    }
 
   .form {
     --bg-light: #efefef;
