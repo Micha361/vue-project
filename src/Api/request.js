@@ -59,3 +59,21 @@ export async function deleteUser(recordId) {
 
     console.log('Datensatz mit ID ' + recordId + ' gelöscht.');
 }
+
+export async function addUser(newUser) {
+    const adduserurl = 'users'; 
+
+    const response = await request(addUserurl, {
+        method: 'POST',
+        body: JSON.stringify({
+            fields: newUser, 
+        }),
+    });
+
+    if (!response) {
+        throw new Error('Benutzer konnte nicht hinzugefügt werden');
+    }
+
+    console.log('Neuer Benutzer hinzugefügt:', response);
+    return response;
+}

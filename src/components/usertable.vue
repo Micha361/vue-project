@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchUser, deleteUser } from '../Api/request.js';
+import { fetchUser, deleteUser, addUser } from '../Api/request.js';
 
 const users = ref([]);
 const loading = ref(true);
@@ -47,12 +47,41 @@ async function handleDelete(recordId, userName) {
         console.error('Fehler beim Löschen:', error);
     }
 }
+
+async function handleAdd() {
+    try {
+        const newUser = {
+            UserId: 6,
+            UserName: 'New User',
+            UserMail: 'newuser@example.com',
+            UserPassword: 'password123',
+            fk_RoleId: 3,
+            StartDate: '2025-01-01',
+            EndDate: '2030-01-01',
+        };
+
+        const addedUser = await addUser(newUser);
+        users.value.push({
+            id: addedUser.id,
+            fields: addedUser.fields,
+        });
+
+        console.log('Benutzer erfolgreich hinzugefügt:', addedUser);
+    } catch (error) {
+        console.error('Fehler beim Hinzufügen des Benutzers:', error);
+    }
+}
+
 </script>
 
 <template>
   <div>
       <h1>Userliste von API</h1>
-      <button @click="addUser">add user</button>
+      <td>
+      <button 
+            class="add-button" 
+            @click="handleAdd(user.id, user.fields.UserName)">Add</button>
+          </td> 
       <div v-if="loading">Loading...</div>
       <table v-else class="styled-table">
       <thead>
