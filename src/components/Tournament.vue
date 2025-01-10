@@ -1,0 +1,37 @@
+<template>
+    <div class="container">
+      <h1>Tournaments</h1>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Place</th>
+              <th>Date</th>
+              <th>Coaches</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>beispiel</td>
+              <td>beispiel</td>
+              <td>beispiel</td>
+              <td>beispiel</td>
+            </tr>
+            <tr>
+              <td>beispiel</td>
+              <td>beispiel</td>
+              <td>beispiel</td>
+              <td>beispiel</td>
+            </tr>
+            <tr>
+              <td>beispiel</td>
+              <td>beispiel</td>
+              <td>beispiel</td>
+              <td>beispiel</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </template>
