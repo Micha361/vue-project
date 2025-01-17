@@ -18,7 +18,6 @@ async function load() {
                 return user.fields.UserId && 
                        user.fields.UserName && 
                        user.fields.UserMail && 
-                       user.fields.UserPassword &&
                        user.fields.fk_RoleId &&
                        user.fields.StartDate &&
                        user.fields.EndDate;
@@ -54,7 +53,6 @@ async function handleAdd() {
             UserId: 6,
             UserName: 'New User',
             UserMail: 'newuser@example.com',
-            UserPassword: 'password123',
             fk_RoleId: 3,
             StartDate: '2025-01-01',
             EndDate: '2030-01-01',
@@ -89,7 +87,6 @@ async function handleAdd() {
           <th>ID</th>
           <th>Name</th>
           <th>Mail</th>
-          <th>Passwort</th>
           <th>Role</th>
           <th>StartDate</th>
           <th>EndDate</th>
@@ -101,7 +98,6 @@ async function handleAdd() {
           <td>{{ user.fields.UserId }}</td>
           <td>{{ user.fields.UserName }}</td> 
           <td>{{ user.fields.UserMail }}</td> 
-          <td>{{ user.fields.UserPassword }}</td> 
           <td>{{ user.fields.fk_RoleId }}</td> 
           <td>{{ user.fields.StartDate }}</td> 
           <td>{{ user.fields.EndDate }}</td> 
