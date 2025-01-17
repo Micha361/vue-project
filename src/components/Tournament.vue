@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchTournaments } from '../Api/request.js';
+import { fetchTournaments, deleteTournament } from '../Api/request.js';
 
 const tournaments = ref([]);
 const filteredTournaments = ref([]);
