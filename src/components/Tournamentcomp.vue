@@ -46,7 +46,7 @@ async function handleDelete(recordId, tournamentName) {
     }
 }
 
-async function handleAdd() {
+/*async function handleAdd() {
     try {
         const newTournament = {
             TournamentId: 2,
@@ -66,7 +66,7 @@ async function handleAdd() {
     } catch (error) {
         console.error('Fehler beim Hinzufügen des Turniers:', error);
     }
-}
+}*/
 </script>
 
 <template>
@@ -89,7 +89,6 @@ async function handleAdd() {
       </thead>
       <tbody>
         <tr v-for="tournament in tournaments" :key="tournament.id">
-          <td>{{ tournament.fields.TournamentId }}</td>
           <td>{{ tournament.fields.TournamentName }}</td>
           <td>{{ tournament.fields.Date }}</td>
           <td>{{ tournament.fields.Participants }}</td>
