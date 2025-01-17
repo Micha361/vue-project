@@ -83,7 +83,7 @@ async function handleDelete(recordId, tournamentName) {
 
 <template>
   <div>
-      <h1>Turnierliste von API</h1>
+      <h1>Turnierliste</h1>
       <div>
           <input
             type="text"
