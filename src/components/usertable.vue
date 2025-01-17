@@ -164,7 +164,7 @@ async function handleDelete(recordId, userName) {
     <table v-else class="styled-table">
       <thead>
         <tr>
-          <th>ID</th>
+          
           <th>Name</th>
           <th>Mail</th>
           <th>Role</th>
@@ -175,7 +175,7 @@ async function handleDelete(recordId, userName) {
       </thead>
       <tbody>
         <tr v-for="user in users" :key="user.id">
-          <td>{{ user.id }}</td>
+         
           <td>{{ user.fields.UserName }}</td>
           <td>{{ user.fields.UserMail }}</td>
           <td>{{ user.fields.RoleName }}</td>
