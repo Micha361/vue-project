@@ -145,6 +145,11 @@ async function handleAdd() {
 </template>
 
 <style>
+
+td{
+  color: white;
+}
+
 .styled-table {
   width: 100%;
   border-collapse: collapse;
