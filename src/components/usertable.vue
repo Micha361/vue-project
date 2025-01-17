@@ -5,6 +5,16 @@ import { fetchUser, deleteUser, addUser } from '../Api/request.js';
 const users = ref([]);
 const loading = ref(true);
 
+const newUser = ref({
+    UserId: '',
+    UserName: '',
+    UserMail: '',
+    UserPassword: '',
+    fk_RoleId: '',
+    StartDate: '',
+    EndDate: ''
+});
+
 onMounted(async () => {
     await load();
 });
@@ -50,69 +60,89 @@ async function handleDelete(recordId, userName) {
 
 async function handleAdd() {
     try {
-        const newUser = {
-            UserId: 6,
-            UserName: 'New User',
-            UserMail: 'newuser@example.com',
-            UserPassword: 'password123',
-            fk_RoleId: 3,
-            StartDate: '2025-01-01',
-            EndDate: '2030-01-01',
-        };
-
-        const addedUser = await addUser(newUser);
+        const addedUser = await addUser(newUser.value);
         users.value.push({
             id: addedUser.id,
             fields: addedUser.fields,
         });
 
         console.log('Benutzer erfolgreich hinzugefügt:', addedUser);
+
+        newUser.value = {
+            UserId: '',
+            UserName: '',
+            UserMail: '',
+            UserPassword: '',
+            fk_RoleId: '',
+            StartDate: '',
+            EndDate: ''
+        };
     } catch (error) {
         console.error('Fehler beim Hinzufügen des Benutzers:', error);
     }
 }
-
 </script>
 
 <template>
   <div>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Mail</th>
+            <th>Role</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input v-model="newUser.UserId" placeholder="ID"></td>
+            <td><input v-model="newUser.UserName" placeholder="Name"></td>
+            <td><input v-model="newUser.UserMail" placeholder="Mail"></td>
+            <td><input v-model="newUser.fk_RoleId" placeholder="Role"></td>
+            <td><input v-model="newUser.StartDate" placeholder="StartDatum" type="date"></td>
+            <td><input v-model="newUser.EndDate" placeholder="EndDatum" type="date"></td>
+            <td><button class="add-button" @click="handleAdd">Add</button></td>
+          </tr>
+        </tbody>
+      </table>
       <h1>Userliste von API</h1>
-      <td>
-      <button 
-            class="add-button" 
-            @click="handleAdd(user.id, user.fields.UserName)">Add</button>
-          </td> 
+
       <div v-if="loading">Loading...</div>
+
       <table v-else class="styled-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Mail</th>
-          <th>Passwort</th>
-          <th>Role</th>
-          <th>StartDate</th>
-          <th>EndDate</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <td>{{ user.fields.UserId }}</td>
-          <td>{{ user.fields.UserName }}</td> 
-          <td>{{ user.fields.UserMail }}</td> 
-          <td>{{ user.fields.UserPassword }}</td> 
-          <td>{{ user.fields.fk_RoleId }}</td> 
-          <td>{{ user.fields.StartDate }}</td> 
-          <td>{{ user.fields.EndDate }}</td> 
-          <td>
-            <button 
-            class="delete-button" 
-            @click="handleDelete(user.id, user.fields.UserName)">Delete</button>
-          </td> 
-        </tr>
-      </tbody>
-    </table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Mail</th>
+            <th>Passwort</th>
+            <th>Role</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td>{{ user.fields.UserId }}</td>
+            <td>{{ user.fields.UserName }}</td> 
+            <td>{{ user.fields.UserMail }}</td> 
+            <td>{{ user.fields.UserPassword }}</td> 
+            <td>{{ user.fields.fk_RoleId }}</td> 
+            <td>{{ user.fields.StartDate }}</td> 
+            <td>{{ user.fields.EndDate }}</td> 
+            <td>
+              <button 
+                class="delete-button" 
+                @click="handleDelete(user.id, user.fields.UserName)">Delete</button>
+            </td> 
+          </tr>
+        </tbody>
+      </table>
   </div>
 </template>
 
@@ -149,5 +179,30 @@ async function handleAdd() {
 }
 h1 {
   color: #1e88e5;
+}
+input {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+.add-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+.add-button:hover {
+  background-color: #45a049;
+}
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+.delete-button:hover {
+  background-color: #d32f2f;
 }
 </style>
