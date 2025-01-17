@@ -1,11 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchTournaments, deleteTournament } from '../Api/request.js';
+import { fetchTournaments, deleteTournament, addTournament } from '../Api/request.js';
 
 const tournaments = ref([]);
-const filteredTournaments = ref([]);
 const loading = ref(true);
-const filterText = ref('');
 
 onMounted(async () => {
     await load();
@@ -17,30 +15,22 @@ async function load() {
         const data = await fetchTournaments();
         tournaments.value = data.records
             .filter(tournament => {
-                return tournament.fields.TournamentName; // Filtert nur Turniere mit `TournamentName`
+                return tournament.fields.TournamentId &&
+                       tournament.fields.TournamentName &&
+                       tournament.fields.Date &&
+                       tournament.fields.Participants &&
+                       tournament.fields.Place;
             })
             .map(record => ({
                 id: record.id,
                 fields: record.fields,
             }));
-        filteredTournaments.value = tournaments.value;
         console.log('Gefilterte Turnierdaten mit Record IDs:', tournaments.value);
     } catch (error) {
-        console.error('Fehler beim Laden der Daten:', error);
+        console.error('Fehler beim Laden der Turnierdaten:', error);
     } finally {
         loading.value = false;
     }
-}
-
-function filterTournaments() {
-    if (!filterText.value.trim()) {
-        filteredTournaments.value = tournaments.value;
-        return;
-    }
-    filteredTournaments.value = tournaments.value.filter(tournament =>
-        tournament.fields.TournamentName &&
-        tournament.fields.TournamentName.toLowerCase().includes(filterText.value.toLowerCase())
-    );
 }
 
 async function handleDelete(recordId, tournamentName) {
@@ -50,20 +40,19 @@ async function handleDelete(recordId, tournamentName) {
 
         await deleteTournament(recordId);
         tournaments.value = tournaments.value.filter(tournament => tournament.id !== recordId);
-        filteredTournaments.value = tournaments.value;
         console.log(`Turnier mit ID ${recordId} gelöscht.`);
     } catch (error) {
-        console.error('Fehler beim Löschen:', error);
+        console.error('Fehler beim Löschen des Turniers:', error);
     }
 }
 
-/*async function handleAdd() {
+async function handleAdd() {
     try {
         const newTournament = {
-            TournamentId: 6,
+            TournamentId: 2,
             TournamentName: 'New Tournament',
-            Date: '2025-01-01',
-            Participants: 'Player A, Player B',
+            Date: '2025-02-19',
+            Participants: 'New Participant',
             Place: 'Zurich',
         };
 
@@ -72,32 +61,25 @@ async function handleDelete(recordId, tournamentName) {
             id: addedTournament.id,
             fields: addedTournament.fields,
         });
-        filteredTournaments.value = tournaments.value;
 
         console.log('Turnier erfolgreich hinzugefügt:', addedTournament);
     } catch (error) {
         console.error('Fehler beim Hinzufügen des Turniers:', error);
     }
-}*/
+}
 </script>
 
 <template>
   <div>
-      <h1>Turnierliste von API</h1>
-      <div>
-          <input
-            type="text"
-            v-model="filterText"
-            @input="filterTournaments"
-            placeholder="Turniere nach Name filtern..."
-          />
-      </div>
-      <button class="add-button" @click="handleAdd">Add Tournament</button>
+      <h1>Turnierliste von Airtable</h1>
+      <button 
+          class="add-button" 
+          @click="handleAdd()">Add Tournament</button>
       <div v-if="loading">Loading...</div>
       <table v-else class="styled-table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Id</th>
           <th>Name</th>
           <th>Date</th>
           <th>Participants</th>
@@ -106,7 +88,7 @@ async function handleDelete(recordId, tournamentName) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="tournament in filteredTournaments" :key="tournament.id">
+        <tr v-for="tournament in tournaments" :key="tournament.id">
           <td>{{ tournament.fields.TournamentId }}</td>
           <td>{{ tournament.fields.TournamentName }}</td>
           <td>{{ tournament.fields.Date }}</td>
@@ -114,9 +96,11 @@ async function handleDelete(recordId, tournamentName) {
           <td>{{ tournament.fields.Place }}</td>
           <td>
             <button 
-            class="delete-button" 
-            @click="handleDelete(tournament.id, tournament.fields.TournamentName)">Delete</button>
-          </td> 
+              class="delete-button" 
+              @click="handleDelete(tournament.id, tournament.fields.TournamentName)">
+              Delete
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -156,13 +140,5 @@ async function handleDelete(recordId, tournamentName) {
 }
 h1 {
   color: #1e88e5;
-}
-input {
-  margin-bottom: 15px;
-  padding: 10px;
-  width: 100%;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 }
 </style>

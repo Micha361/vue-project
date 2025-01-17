@@ -77,3 +77,29 @@ export async function addUser(newUser) {
     console.log('Neuer Benutzer hinzugefügt:', response);
     return response;
 }
+
+
+// Tournaments
+
+
+
+export async function fetchTournaments() {
+    const response = await request('Tournament');
+    console.log(response);
+    return response;
+}
+
+
+export async function deleteTournament(recordId) {
+    const url = `Tournament/${recordId}`;
+
+    const response = await request(url, {
+        method: 'DELETE',
+    });
+
+    if (!response) {
+        throw new Error('Löschen fehlgeschlagen');
+    }
+
+    console.log('Turnier mit ID ' + recordId + ' gelöscht.');
+}

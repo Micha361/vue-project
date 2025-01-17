@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import { fetchUser, deleteUser, addUser } from '../Api/request.js';
@@ -28,7 +29,6 @@ async function load() {
                 return user.fields.UserId && 
                        user.fields.UserName && 
                        user.fields.UserMail && 
-                       user.fields.UserPassword &&
                        user.fields.fk_RoleId &&
                        user.fields.StartDate &&
                        user.fields.EndDate;
@@ -60,7 +60,20 @@ async function handleDelete(recordId, userName) {
 
 async function handleAdd() {
     try {
+<<<<<<< HEAD
         const addedUser = await addUser(newUser.value);
+=======
+        const newUser = {
+            UserId: 6,
+            UserName: 'New User',
+            UserMail: 'newuser@example.com',
+            fk_RoleId: 3,
+            StartDate: '2025-01-01',
+            EndDate: '2030-01-01',
+        };
+
+        const addedUser = await addUser(newUser);
+>>>>>>> Tournament
         users.value.push({
             id: addedUser.id,
             fields: addedUser.fields,
@@ -114,6 +127,7 @@ async function handleAdd() {
       <div v-if="loading">Loading...</div>
 
       <table v-else class="styled-table">
+<<<<<<< HEAD
         <thead>
           <tr>
             <th>ID</th>
@@ -143,6 +157,35 @@ async function handleAdd() {
           </tr>
         </tbody>
       </table>
+=======
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Mail</th>
+          <th>Role</th>
+          <th>StartDate</th>
+          <th>EndDate</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in users" :key="user.id">
+          <td>{{ user.fields.UserId }}</td>
+          <td>{{ user.fields.UserName }}</td> 
+          <td>{{ user.fields.UserMail }}</td> 
+          <td>{{ user.fields.fk_RoleId }}</td> 
+          <td>{{ user.fields.StartDate }}</td> 
+          <td>{{ user.fields.EndDate }}</td> 
+          <td>
+            <button 
+            class="delete-button" 
+            @click="handleDelete(user.id, user.fields.UserName)">Delete</button>
+          </td> 
+        </tr>
+      </tbody>
+    </table>
+>>>>>>> Tournament
   </div>
 </template>
 
