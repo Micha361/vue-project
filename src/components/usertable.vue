@@ -100,7 +100,14 @@ async function handleAdd() {
           <tr>
             <td><input v-model="newUser.UserName" placeholder="Name"></td>
             <td><input v-model="newUser.UserMail" placeholder="Mail"></td>
-            <td><input v-model="newUser.fk_RoleId" placeholder="Role"></td>
+            <td>
+              <select v-model="newUser.fk_RoleId">
+                <option value="" disabled>Rolle</option>
+                <option value="coach">Coach</option>
+                <option value="coachee">Coachee</option>
+                <option value="owner">Owner</option>
+              </select>
+            </td>
             <td><input v-model="newUser.StartDate" placeholder="StartDatum" type="date"></td>
             <td><input v-model="newUser.EndDate" placeholder="EndDatum" type="date"></td>
             <td><button class="add-button" @click="handleAdd">Add</button></td>
@@ -143,6 +150,7 @@ async function handleAdd() {
       </table>
   </div>
 </template>
+
 
 <style>
 
@@ -208,4 +216,31 @@ input {
 .delete-button:hover {
   background-color: #d32f2f;
 }
+
+select {
+  width: 110%;
+  padding: 10px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #000000;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 5px rgba(30, 136, 229, 0.5);
+}
+
+select:hover {
+  background-color: #000000;
+}
+
+option {
+  color: #ffffff;
+  background-color: rgb(0, 0, 0);
+}
+
 </style>
