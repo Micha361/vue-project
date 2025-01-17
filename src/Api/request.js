@@ -77,3 +77,13 @@ export async function addUser(newUser) {
     console.log('Neuer Benutzer hinzugefügt:', response);
     return response;
 }
+
+
+
+
+
+export async function fetchTournaments() {
+    const response = await request('Tournament');
+    console.log(response);
+    return response;
+}
