@@ -2,15 +2,12 @@ const apiKey = 'pat0LKbYiZGd4vI39.002114373686da547d93cc2b79fc2334ab6cd9a668d0f8
 const baseId = 'appCeyf9jQ3KiVOcA';
 const baseUrl = `https://api.airtable.com/v0/${baseId}/`;
 
+
 async function request(url, options = {}) {
     const headers = {
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
+        Authorization: `Bearer ${apiKey}`,
     };
-
-    if (apiKey) {
-        headers['Authorization'] = 'Bearer ' + apiKey;
-    }
 
     const response = await fetch(baseUrl + url, { headers, ...options });
 
@@ -25,9 +22,6 @@ async function request(url, options = {}) {
 }
 
 class ValidationError {
-    message;
-    errors;
-
     constructor(message, errors) {
         this.message = message;
         this.errors = errors;
@@ -36,37 +30,28 @@ class ValidationError {
 
 export async function fetchUser() {
     const response = await request('users');
-    console.log(response);
-    return response;
-}
-
-export async function fetchMitglied(id) {
-    const response = await request(`users/${id}`);
-    console.log(response);
+    console.log('Geladene Benutzer:', response);
     return response;
 }
 
 export async function deleteUser(recordId) {
     const url = `users/${recordId}`;
-
-    const response = await request(url, {
-        method: 'DELETE',
-    });
+    const response = await request(url, { method: 'DELETE' });
 
     if (!response) {
         throw new Error('Löschen fehlgeschlagen');
     }
 
-    console.log('Datensatz mit ID ' + recordId + ' gelöscht.');
+    console.log(`Benutzer mit ID ${recordId} gelöscht.`);
 }
 
 export async function addUser(newUser) {
-    const adduserurl = 'users'; 
-
-    const response = await request(addUserurl, {
+    const url = 'users';
+    console.log('Gesendete Daten:', JSON.stringify({ fields: newUser })); 
+    const response = await request(url, {
         method: 'POST',
         body: JSON.stringify({
-            fields: newUser, 
+            fields: newUser,
         }),
     });
 
@@ -75,6 +60,12 @@ export async function addUser(newUser) {
     }
 
     console.log('Neuer Benutzer hinzugefügt:', response);
+    return response;
+}
+
+export async function fetchRoles() {
+    const response = await request('Role'); 
+    console.log('Geladene Rollen:', response);
     return response;
 }
 
