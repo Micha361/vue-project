@@ -88,7 +88,6 @@ async function handleAdd() {
       <table class="styled-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Mail</th>
             <th>Role</th>
@@ -99,7 +98,6 @@ async function handleAdd() {
         </thead>
         <tbody>
           <tr>
-            <td><input v-model="newUser.UserId" placeholder="ID"></td>
             <td><input v-model="newUser.UserName" placeholder="Name"></td>
             <td><input v-model="newUser.UserMail" placeholder="Mail"></td>
             <td><input v-model="newUser.fk_RoleId" placeholder="Role"></td>
