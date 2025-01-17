@@ -82,8 +82,62 @@ async function handleDelete(recordId, tournamentName) {
 </script>
 
 <template>
+<div>
+    <h1>Turnier Hinzufügen</h1>
+    <div>        
+    </div>
+    <div v-if="loading">Loading...</div>
+    <table v-else class="styled-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Participants</th>
+                <th>Place</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(tournament, index) in filteredTournaments" :key="tournament.id">
+                <td>
+                    <input
+                        type="text"
+                        v-model="tournament.fields.TournamentName"
+                        placeholder="Turniername"
+                    />
+                </td>
+                <td>
+                    <input
+                        type="date"
+                        v-model="tournament.fields.Date"
+                        placeholder="Datum"
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        v-model="tournament.fields.Participants"
+                        placeholder="Teilnehmer"
+                    />
+                </td>
+                <td>
+                    <input
+                        type="text"
+                        v-model="tournament.fields.Place"
+                        placeholder="Ort"
+                    />
+                </td>
+                <td>
+                    <button class="add-button" @click="handleAdd(index)">Add</button>
+                </td> 
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
   <div>
-      <h1>Turnierliste von API</h1>
+      <h1>Turnierliste</h1>
       <div>
           <input
             type="text"
@@ -92,7 +146,6 @@ async function handleDelete(recordId, tournamentName) {
             placeholder="Turniere nach Name filtern..."
           />
       </div>
-      <button class="add-button" @click="handleAdd">Add Tournament</button>
       <div v-if="loading">Loading...</div>
       <table v-else class="styled-table">
       <thead>
