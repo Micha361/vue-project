@@ -94,3 +94,33 @@ export async function deleteTournament(recordId) {
 
     console.log('Turnier mit ID ' + recordId + ' gelöscht.');
 }
+
+
+
+
+//Bills
+
+export async function fetchBills() {
+    const response = await request('Bill');
+    console.log('Geladene Rechnungen:', response);
+    return response;
+}
+
+export async function addBill(newBill) {
+    const response = await request('Bill', {
+        method: 'POST',
+        body: JSON.stringify({
+            fields: newBill
+        })
+    });
+    if (!response) throw new Error('Rechnung konnte nicht hinzugefügt werden');
+    return response;
+}
+
+
+export async function deleteBill(recordId) {
+    const url = `Bill/${recordId}`;
+    const response = await request(url, { method: 'DELETE' });
+    if (!response) throw new Error('Löschen der Rechnung fehlgeschlagen');
+    return response;
+}
