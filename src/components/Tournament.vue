@@ -1,149 +1,160 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { fetchTournaments, deleteTournament } from '../Api/request.js';
+import { ref, onMounted, computed } from 'vue';
+import { fetchTournaments, addTournament, deleteTournament } from '../Api/request.js';
 
 const tournaments = ref([]);
-const filteredTournaments = ref([]);
 const loading = ref(true);
-const filterText = ref('');
 
-// Separate fields for the top input area
 const newTournament = ref({
-    TournamentName: '',
-    Date: '',
-    Participants: '',
-    Place: '',
+  TournamentName: '',
+  Date: '',
+  Participants: '',
+  Place: ''
 });
 
+const filterText = ref('');
+
 onMounted(async () => {
-    await load();
+  await load();
 });
 
 async function load() {
-    loading.value = true;
-    try {
-        const data = await fetchTournaments();
-        tournaments.value = data.records
-            .filter(tournament => {
-                return tournament.fields.TournamentName; // Filtert nur Turniere mit `TournamentName`
-            })
-            .map(record => ({
-                id: record.id,
-                fields: record.fields,
-            }));
-        filteredTournaments.value = tournaments.value;
-        console.log('Gefilterte Turnierdaten mit Record IDs:', tournaments.value);
-    } catch (error) {
-        console.error('Fehler beim Laden der Daten:', error);
-    } finally {
-        loading.value = false;
-    }
+  loading.value = true;
+  try {
+    const data = await fetchTournaments();
+    tournaments.value = data.records
+      .filter(tournament => {
+        return (
+          tournament.fields.TournamentName &&
+          tournament.fields.Date &&
+          tournament.fields.Participants &&
+          tournament.fields.Place
+        );
+      })
+      .map(record => ({
+        id: record.id,
+        fields: record.fields,
+      }));
+    console.log('Gefilterte Turnierdaten:', tournaments.value);
+  } catch (error) {
+    console.error('Fehler beim Laden der Turnierdaten:', error);
+  } finally {
+    loading.value = false;
+  }
 }
 
-function filterTournaments() {
-    if (!filterText.value.trim()) {
-        filteredTournaments.value = tournaments.value;
-        return;
-    }
-    filteredTournaments.value = tournaments.value.filter(tournament =>
-        tournament.fields.TournamentName &&
-        tournament.fields.TournamentName.toLowerCase().includes(filterText.value.toLowerCase())
-    );
+async function handleAdd() {
+  if (
+    !newTournament.value.TournamentName ||
+    !newTournament.value.Date ||
+    !newTournament.value.Participants ||
+    !newTournament.value.Place
+  ) {
+    alert('Bitte alle Felder ausfüllen.');
+    return;
+  }
+
+  try {
+    const addedTournament = await addTournament(newTournament.value);
+    tournaments.value.push({
+      id: addedTournament.id,
+      fields: addedTournament.fields,
+    });
+
+    newTournament.value = {
+      TournamentName: '',
+      Date: '',
+      Participants: '',
+      Place: ''
+    };
+
+    console.log('Turnier erfolgreich hinzugefügt:', addedTournament);
+  } catch (error) {
+    console.error('Fehler beim Hinzufügen des Turniers:', error);
+  }
 }
 
 async function handleDelete(recordId, tournamentName) {
-    try {
-        const confirmed = confirm(`Möchtest du das Turnier "${tournamentName}" wirklich löschen?`);
-        if (!confirmed) return;
+  try {
+    const confirmed = confirm(`Möchtest du das Turnier "${tournamentName}" wirklich löschen?`);
+    if (!confirmed) return;
 
-        await deleteTournament(recordId);
-        tournaments.value = tournaments.value.filter(tournament => tournament.id !== recordId);
-        filteredTournaments.value = tournaments.value;
-        console.log(`Turnier mit ID ${recordId} gelöscht.`);
-    } catch (error) {
-        console.error('Fehler beim Löschen:', error);
-    }
+    await deleteTournament(recordId);
+    tournaments.value = tournaments.value.filter(tournament => tournament.id !== recordId);
+    console.log(`Turnier mit ID ${recordId} gelöscht.`);
+  } catch (error) {
+    console.error('Fehler beim Löschen des Turniers:', error);
+  }
 }
 
-function handleAdd() {
-    // Add logic for adding a new tournament (e.g., sending data to an API or updating the list locally)
-    console.log('Neues Turnier:', newTournament.value);
-    // Reset fields after adding
-    newTournament.value = {
-        TournamentName: '',
-        Date: '',
-        Participants: '',
-        Place: '',
-    };
-}
+const filteredTournaments = computed(() => {
+  return tournaments.value.filter(tournament =>
+    tournament.fields.TournamentName.toLowerCase().includes(filterText.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
-<div>
-    <h1>Turnier Hinzufügen</h1>
-    <div>
-        <input
-            type="text"
-            v-model="newTournament.TournamentName"
-            placeholder="Turniername"
-        />
-        <input
-            type="date"
-            v-model="newTournament.Date"
-            placeholder="Datum"
-        />
-        <input
-            type="text"
-            v-model="newTournament.Participants"
-            placeholder="Teilnehmer"
-        />
-        <input
-            type="text"
-            v-model="newTournament.Place"
-            placeholder="Ort"
-        />
-        <button class="add-button" @click="handleAdd">Hinzufügen</button>
-    </div>
-</div>
+  <div>
+    <h1>Turniere hinzufügen</h1>
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Turniername</th>
+          <th>Datum</th>
+          <th>Teilnehmer</th>
+          <th>Ort</th>
+          <th>Hinzufügen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input v-model="newTournament.TournamentName" placeholder="Turniername"></td>
+          <td><input v-model="newTournament.Date" type="date"></td>
+          <td><input v-model="newTournament.Participants" placeholder="Teilnehmer"></td>
+          <td><input v-model="newTournament.Place" placeholder="Ort"></td>
+          <td><button class="add-button" @click="handleAdd">Hinzufügen</button></td>
+        </tr>
+      </tbody>
+    </table>
 
-<div>
-    <h1>Turnierliste</h1>
-    <div>
-        <input
-            type="text"
-            v-model="filterText"
-            @input="filterTournaments"
-            placeholder="Turniere nach Name filtern..."
-        />
-    </div>
+    <h2>Turnierliste</h2>
+    <input
+      v-model="filterText"
+      placeholder="Turniere nach Name filtern..."
+      class="filter-input"
+    />
     <div v-if="loading">Loading...</div>
     <table v-else class="styled-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Participants</th>
-                <th>Place</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="tournament in filteredTournaments" :key="tournament.id">
-                <td>{{ tournament.fields.TournamentId }}</td>
-                <td>{{ tournament.fields.TournamentName }}</td>
-                <td>{{ tournament.fields.Date }}</td>
-                <td>{{ tournament.fields.Participants }}</td>
-                <td>{{ tournament.fields.Place }}</td>
-                <td>
-                    <button 
-                        class="delete-button" 
-                        @click="handleDelete(tournament.id, tournament.fields.TournamentName)">Delete</button>
-                </td> 
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Datum</th>
+          <th>Teilnehmer</th>
+          <th>Ort</th>
+          <th>Löschen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="tournament in filteredTournaments" :key="tournament.id">
+          <td>{{ tournament.id }}</td>
+          <td>{{ tournament.fields.TournamentName }}</td>
+          <td>{{ tournament.fields.Date }}</td>
+          <td>{{ tournament.fields.Participants }}</td>
+          <td>{{ tournament.fields.Place }}</td>
+          <td>
+            <button
+              class="delete-button"
+              @click="handleDelete(tournament.id, tournament.fields.TournamentName)"
+            >
+              Löschen
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
-</div>
+  </div>
 </template>
 
 <style>
@@ -180,12 +191,30 @@ function handleAdd() {
 h1 {
   color: #1e88e5;
 }
-input {
-  margin-bottom: 15px;
+.add-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
   padding: 10px;
+  cursor: pointer;
+}
+.add-button:hover {
+  background-color: #45a049;
+}
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+.filter-input {
   width: 100%;
+  padding: 10px;
+  margin: 10px 0;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 }
 </style>

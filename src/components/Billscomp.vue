@@ -24,7 +24,7 @@ async function load() {
     try {
         const data = await fetchBills();
         bills.value = data.records
-            .filter(record => record.fields.Name) // Nur Rechnungen mit Namen behalten
+            .filter(record => record.fields.Name) 
             .map(record => ({
                 id: record.id,
                 fields: record.fields
