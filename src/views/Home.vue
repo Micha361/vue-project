@@ -8,7 +8,7 @@ import TournamentsSoon from '../components/TournamentsSoon.vue';
       <p>Welcome to the Home page!</p>
       <TournamentsSoon />
     </div>
-  </template>
+</template>
   
 
 

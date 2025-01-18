@@ -128,6 +128,7 @@ async function handleDelete(recordId, userName) {
 </script>
 
 <template>
+  <h1>User Hinzufügen</h1>
   <div>
     <table class="styled-table">
       <thead>
@@ -159,7 +160,7 @@ async function handleDelete(recordId, userName) {
       </tbody>
     </table>
 
-    <h1>Userliste von API</h1>
+    <h1>Userliste</h1>
     <div v-if="loading">Loading...</div>
     <table v-else class="styled-table">
       <thead>
