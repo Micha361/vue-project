@@ -95,13 +95,14 @@ export default {
 }
 
 .schedule-cell {
-  background-color: #c9c9c9;
+  background-color: #242424;
+  transition: 0.3 ease;
 }
 
 .schedule-cell:hover {
   cursor: pointer;
-  background-color: #c9c9c9;
-  background-color: #a0a0a0;
+  background-color: #3d3d3d;
+  transition: 0.3 ease;
 }
 
 .activity-input {
