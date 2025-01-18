@@ -7,6 +7,14 @@ const filteredTournaments = ref([]);
 const loading = ref(true);
 const filterText = ref('');
 
+// Separate fields for the top input area
+const newTournament = ref({
+    TournamentName: '',
+    Date: '',
+    Participants: '',
+    Place: '',
+});
+
 onMounted(async () => {
     await load();
 });
@@ -57,123 +65,85 @@ async function handleDelete(recordId, tournamentName) {
     }
 }
 
-/*async function handleAdd() {
-    try {
-        const newTournament = {
-            TournamentId: 6,
-            TournamentName: 'New Tournament',
-            Date: '2025-01-01',
-            Participants: 'Player A, Player B',
-            Place: 'Zurich',
-        };
-
-        const addedTournament = await addTournament(newTournament);
-        tournaments.value.push({
-            id: addedTournament.id,
-            fields: addedTournament.fields,
-        });
-        filteredTournaments.value = tournaments.value;
-
-        console.log('Turnier erfolgreich hinzugefügt:', addedTournament);
-    } catch (error) {
-        console.error('Fehler beim Hinzufügen des Turniers:', error);
-    }
-}*/
+function handleAdd() {
+    // Add logic for adding a new tournament (e.g., sending data to an API or updating the list locally)
+    console.log('Neues Turnier:', newTournament.value);
+    // Reset fields after adding
+    newTournament.value = {
+        TournamentName: '',
+        Date: '',
+        Participants: '',
+        Place: '',
+    };
+}
 </script>
 
 <template>
 <div>
     <h1>Turnier Hinzufügen</h1>
-    <div>        
+    <div>
+        <input
+            type="text"
+            v-model="newTournament.TournamentName"
+            placeholder="Turniername"
+        />
+        <input
+            type="date"
+            v-model="newTournament.Date"
+            placeholder="Datum"
+        />
+        <input
+            type="text"
+            v-model="newTournament.Participants"
+            placeholder="Teilnehmer"
+        />
+        <input
+            type="text"
+            v-model="newTournament.Place"
+            placeholder="Ort"
+        />
+        <button class="add-button" @click="handleAdd">Hinzufügen</button>
+    </div>
+</div>
+
+<div>
+    <h1>Turnierliste</h1>
+    <div>
+        <input
+            type="text"
+            v-model="filterText"
+            @input="filterTournaments"
+            placeholder="Turniere nach Name filtern..."
+        />
     </div>
     <div v-if="loading">Loading...</div>
     <table v-else class="styled-table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Date</th>
                 <th>Participants</th>
                 <th>Place</th>
-                <th>Actions</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(tournament, index) in filteredTournaments" :key="tournament.id">
+            <tr v-for="tournament in filteredTournaments" :key="tournament.id">
+                <td>{{ tournament.fields.TournamentId }}</td>
+                <td>{{ tournament.fields.TournamentName }}</td>
+                <td>{{ tournament.fields.Date }}</td>
+                <td>{{ tournament.fields.Participants }}</td>
+                <td>{{ tournament.fields.Place }}</td>
                 <td>
-                    <input
-                        type="text"
-                        v-model="tournament.fields.TournamentName"
-                        placeholder="Turniername"
-                    />
-                </td>
-                <td>
-                    <input
-                        type="date"
-                        v-model="tournament.fields.Date"
-                        placeholder="Datum"
-                    />
-                </td>
-                <td>
-                    <input
-                        type="text"
-                        v-model="tournament.fields.Participants"
-                        placeholder="Teilnehmer"
-                    />
-                </td>
-                <td>
-                    <input
-                        type="text"
-                        v-model="tournament.fields.Place"
-                        placeholder="Ort"
-                    />
-                </td>
-                <td>
-                    <button class="add-button" @click="handleAdd(index)">Add</button>
+                    <button 
+                        class="delete-button" 
+                        @click="handleDelete(tournament.id, tournament.fields.TournamentName)">Delete</button>
                 </td> 
             </tr>
         </tbody>
     </table>
 </div>
-
-
-  <div>
-      <h1>Turnierliste</h1>
-      <div>
-          <input
-            type="text"
-            v-model="filterText"
-            @input="filterTournaments"
-            placeholder="Turniere nach Name filtern..."
-          />
-      </div>
-      <div v-if="loading">Loading...</div>
-      <table v-else class="styled-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Date</th>
-          <th>Participants</th>
-          <th>Place</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="tournament in filteredTournaments" :key="tournament.id">
-          <td>{{ tournament.fields.TournamentId }}</td>
-          <td>{{ tournament.fields.TournamentName }}</td>
-          <td>{{ tournament.fields.Date }}</td>
-          <td>{{ tournament.fields.Participants }}</td>
-          <td>{{ tournament.fields.Place }}</td>
-          <td>
-            <button 
-            class="delete-button" 
-            @click="handleDelete(tournament.id, tournament.fields.TournamentName)">Delete</button>
-          </td> 
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </template>
 
 <style>
