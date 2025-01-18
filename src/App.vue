@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router';
 
 <template>
   <div id="app">
-    <Navbar v-if="isLoggedIn" />
+    <Navbar v-if="isLoggedIn"/>
     <Sidebar />
     <main class="content">
       <RouterView />
