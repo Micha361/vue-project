@@ -107,12 +107,7 @@ async function togglePayed(recordId, currentStatus) {
   <div>
     <h1>Rechnungen</h1>
     <div>
-      <input 
-        v-model="filterText" 
-        placeholder="Nach Name filtern..." 
-        @input="filterBills"
-        class="filter-input"
-      />
+
     </div>
     <table class="styled-table">
       <thead>
@@ -121,8 +116,7 @@ async function togglePayed(recordId, currentStatus) {
           <th>Amount</th>
           <th>DueDate</th>
           <th>Payed</th>
-          <th>Toggle Payed</th>
-          <th>Delete</th>
+          <th>Add</th>
         </tr>
       </thead>
       <tbody>
@@ -137,6 +131,12 @@ async function togglePayed(recordId, currentStatus) {
     </table>
 
     <h2>Rechnungsliste</h2>
+    <input 
+        v-model="filterText" 
+        placeholder="Nach Name filtern..." 
+        @input="filterBills"
+        class="filter-input"
+      />
     <div v-if="loading">Loading...</div>
     <table v-else class="styled-table">
       <thead>
