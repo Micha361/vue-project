@@ -70,6 +70,10 @@ button:focus-visible {
   color: white;
 }
 
+td{
+  color: white;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

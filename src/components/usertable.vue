@@ -194,37 +194,5 @@ async function handleDelete(recordId, userName) {
 </template>
 
 <style>
-.styled-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 18px;
-  text-align: left;
-  color: #ff0000;
-}
-.styled-table thead tr {
-  background-color: #1e88e5;
-  color: #ffffff;
-  text-align: left;
-}
-.styled-table th,
-.styled-table td {
-  padding: 12px 15px;
-  border: 1px solid #333333;
-}
-.styled-table tbody tr {
-  background-color: #212121;
-}
-.styled-table tbody tr:nth-of-type(even) {
-  background-color: #2c2c2c;
-}
-.styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #1e88e5;
-}
-.styled-table tbody tr:hover {
-  background-color: #37474f;
-}
-h1 {
-  color: #1e88e5;
-}
+
 </style>

@@ -1,4 +1,9 @@
+<script setup>
+import navbarlogin from '../components/navbarlogin.vue';
+</script>
+
 <template>
+  <navbarlogin />
     <form class="form" @submit.prevent="handleLogin">
       <span class="input-span">
         <label for="email" class="label">Email</label>
