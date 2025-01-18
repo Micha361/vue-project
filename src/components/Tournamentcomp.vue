@@ -78,14 +78,14 @@ async function handleDelete(tournamentName) {
     const confirmed = confirm(`Möchtest du das Turnier "${tournamentName}" wirklich löschen?`);
     if (!confirmed) return;
 
-    // Die Löschfunktion erfordert weiterhin die Record-ID, also müssen wir sie vor dem Entfernen verwenden
+ 
     const tournamentIndex = tournaments.value.findIndex(
       tournament => tournament.fields.TournamentName === tournamentName
     );
 
     if (tournamentIndex !== -1) {
       const tournamentToDelete = tournaments.value[tournamentIndex];
-      await deleteTournament(tournamentToDelete.id); // ID wird verwendet, aber nicht in der Tabelle gezeigt
+      await deleteTournament(tournamentToDelete.id); 
       tournaments.value.splice(tournamentIndex, 1);
     }
     console.log(`Turnier "${tournamentName}" gelöscht.`);

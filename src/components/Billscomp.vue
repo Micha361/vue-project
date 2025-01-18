@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchBills, addBill, deleteBill } from '../Api/request.js';
+import { fetchBills, addBill, deleteBill, updateBill } from '../Api/request.js';
 
 const bills = ref([]);
 const loading = ref(true);
@@ -8,7 +8,6 @@ const filterText = ref('');
 const filteredBills = ref([]);
 
 const newBill = ref({
-    BillId: '',
     Name: '',
     Amount: '',
     DueDate: '',
@@ -63,7 +62,6 @@ async function handleAdd() {
         filteredBills.value = bills.value;
 
         newBill.value = {
-            BillId: '',
             Name: '',
             Amount: '',
             DueDate: '',
@@ -89,6 +87,20 @@ async function handleDelete(recordId, billName) {
         console.error('Fehler beim Löschen der Rechnung:', error);
     }
 }
+
+async function togglePayed(recordId, currentStatus) {
+    try {
+        const updatedBill = await updateBill(recordId, { payed: !currentStatus });
+        const index = bills.value.findIndex(bill => bill.id === recordId);
+        if (index !== -1) {
+            bills.value[index].fields.payed = updatedBill.fields.payed;
+            filteredBills.value = bills.value;
+        }
+        console.log(`Rechnung mit ID ${recordId} aktualisiert:`, updatedBill);
+    } catch (error) {
+        console.error('Fehler beim Aktualisieren der Rechnung:', error);
+    }
+}
 </script>
 
 <template>
@@ -109,7 +121,8 @@ async function handleDelete(recordId, billName) {
           <th>Amount</th>
           <th>DueDate</th>
           <th>Payed</th>
-          <th>Add</th>
+          <th>Toggle Payed</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -128,25 +141,27 @@ async function handleDelete(recordId, billName) {
     <table v-else class="styled-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Name</th>
           <th>Amount</th>
           <th>DueDate</th>
           <th>Payed</th>
-          <th>Payed</th>
+          <th>Toggle Payed</th>
           <th>Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="bill in filteredBills" :key="bill.id">
-          <td>{{ bill.fields.BillId }}</td>
           <td>{{ bill.fields.Name }}</td>
           <td>{{ bill.fields.Amount }}</td>
           <td>{{ bill.fields.DueDate }}</td>
           <td>{{ bill.fields.payed ? 'Ja' : 'Nein' }}</td>
-          <td><button 
+          <td>
+            <button 
               class="pay-button" 
-              @click="handleDelete(bill.id, bill.fields.Name)">Yes</button></td>
+              @click="togglePayed(bill.id, bill.fields.payed)">
+              {{ bill.fields.payed ? 'Set to Unpaid' : 'Set to Paid' }}
+            </button>
+          </td>
           <td>
             <button 
               class="delete-button" 

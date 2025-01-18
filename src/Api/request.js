@@ -129,3 +129,16 @@ export async function deleteBill(recordId) {
     if (!response) throw new Error('Löschen der Rechnung fehlgeschlagen');
     console.log(`Rechnung mit ID ${recordId} gelöscht.`);
 }
+
+export async function updateBill(recordId, updatedFields) {
+    const url = `Bill/${recordId}`;
+    const response = await request(url, {
+        method: 'PATCH',
+        body: JSON.stringify({
+            fields: updatedFields
+        }),
+    });
+
+    if (!response) throw new Error('Rechnung konnte nicht aktualisiert werden');
+    return response;
+}
