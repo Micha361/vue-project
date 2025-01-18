@@ -1,15 +1,36 @@
 <script setup>
 import Navbar from './components/navbar.vue';
 import { RouterView } from 'vue-router';
+import { ref, onMounted, onUnmounted } from 'vue';
+
+const isSmallScreen = ref(false);
+
+const checkScreenSize = () => {
+  isSmallScreen.value = window.innerWidth < 800;
+};
+
+onMounted(() => {
+  checkScreenSize();
+  window.addEventListener('resize', checkScreenSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkScreenSize); 
+});
 </script>
 
 <template>
   <div id="app">
-    <Navbar v-if="isLoggedIn"/>
-    <Sidebar />
-    <main class="content">
-      <RouterView />
-    </main>
+    <div v-if="isSmallScreen" class="screen-warning">
+      <p>Diese Seite ist nicht für diese Bildschirmgröße geeignet.</p>
+    </div>
+    <div v-else>
+      <Navbar v-if="isLoggedIn" />
+      <Sidebar />
+      <main class="content">
+        <RouterView />
+      </main>
+    </div>
   </div>
 </template>
 
@@ -40,8 +61,24 @@ export default {
 </script>
 
 <style scoped>
+.screen-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #f44336;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  text-align: center;
+  z-index: 9999;
+}
+
 .content {
-  margin-left: 250px; 
+  margin-left: 250px;
   padding: 1rem;
 }
 
