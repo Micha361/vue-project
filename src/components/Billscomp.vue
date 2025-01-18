@@ -133,6 +133,7 @@ async function handleDelete(recordId, billName) {
           <th>Amount</th>
           <th>DueDate</th>
           <th>Payed</th>
+          <th>Payed</th>
           <th>Delete</th>
         </tr>
       </thead>
@@ -143,6 +144,9 @@ async function handleDelete(recordId, billName) {
           <td>{{ bill.fields.Amount }}</td>
           <td>{{ bill.fields.DueDate }}</td>
           <td>{{ bill.fields.payed ? 'Ja' : 'Nein' }}</td>
+          <td><button 
+              class="pay-button" 
+              @click="handleDelete(bill.id, bill.fields.Name)">Yes</button></td>
           <td>
             <button 
               class="delete-button" 
@@ -214,5 +218,13 @@ h1 {
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.pay-button {
+  background-color: #382baf;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
 }
 </style>
