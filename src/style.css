@@ -31,6 +31,7 @@ body {
 }
 
 h1 {
+  color: white;
   font-size: 3.2em;
   line-height: 1.1;
 }
@@ -63,6 +64,10 @@ button:focus-visible {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+.users-page h1{
+  color: white;
 }
 
 @media (prefers-color-scheme: light) {
