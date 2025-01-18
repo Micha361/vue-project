@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { fetchTournaments, addTournament, deleteTournament } from '../Api/request.js';
 
 const tournaments = ref([]);
@@ -32,7 +32,7 @@ async function load() {
         );
       })
       .map(record => ({
-        id: record.id,
+        // Keine `id` mehr notwendig, nur die `fields`
         fields: record.fields,
       }));
     console.log('Gefilterte Turnierdaten:', tournaments.value);
@@ -57,7 +57,6 @@ async function handleAdd() {
   try {
     const addedTournament = await addTournament(newTournament.value);
     tournaments.value.push({
-      id: addedTournament.id,
       fields: addedTournament.fields,
     });
 
@@ -74,14 +73,22 @@ async function handleAdd() {
   }
 }
 
-async function handleDelete(recordId, tournamentName) {
+async function handleDelete(tournamentName) {
   try {
     const confirmed = confirm(`Möchtest du das Turnier "${tournamentName}" wirklich löschen?`);
     if (!confirmed) return;
 
-    await deleteTournament(recordId);
-    tournaments.value = tournaments.value.filter(tournament => tournament.id !== recordId);
-    console.log(`Turnier mit ID ${recordId} gelöscht.`);
+    // Die Löschfunktion erfordert weiterhin die Record-ID, also müssen wir sie vor dem Entfernen verwenden
+    const tournamentIndex = tournaments.value.findIndex(
+      tournament => tournament.fields.TournamentName === tournamentName
+    );
+
+    if (tournamentIndex !== -1) {
+      const tournamentToDelete = tournaments.value[tournamentIndex];
+      await deleteTournament(tournamentToDelete.id); // ID wird verwendet, aber nicht in der Tabelle gezeigt
+      tournaments.value.splice(tournamentIndex, 1);
+    }
+    console.log(`Turnier "${tournamentName}" gelöscht.`);
   } catch (error) {
     console.error('Fehler beim Löschen des Turniers:', error);
   }
@@ -128,7 +135,6 @@ const filteredTournaments = computed(() => {
     <table v-else class="styled-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Name</th>
           <th>Datum</th>
           <th>Teilnehmer</th>
@@ -137,8 +143,7 @@ const filteredTournaments = computed(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="tournament in filteredTournaments" :key="tournament.id">
-          <td>{{ tournament.id }}</td>
+        <tr v-for="tournament in filteredTournaments" :key="tournament.fields.TournamentName">
           <td>{{ tournament.fields.TournamentName }}</td>
           <td>{{ tournament.fields.Date }}</td>
           <td>{{ tournament.fields.Participants }}</td>
@@ -146,7 +151,7 @@ const filteredTournaments = computed(() => {
           <td>
             <button
               class="delete-button"
-              @click="handleDelete(tournament.id, tournament.fields.TournamentName)"
+              @click="handleDelete(tournament.fields.TournamentName)"
             >
               Löschen
             </button>
