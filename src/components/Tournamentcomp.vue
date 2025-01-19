@@ -32,7 +32,7 @@ async function load() {
         );
       })
       .map(record => ({
-        // Keine `id` mehr notwendig, nur die `fields`
+       
         fields: record.fields,
       }));
     console.log('Gefilterte Turnierdaten:', tournaments.value);

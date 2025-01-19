@@ -150,3 +150,30 @@ export async function updateBill(recordId, updatedFields) {
     if (!response) throw new Error('Rechnung konnte nicht aktualisiert werden');
     return response;
 }
+
+
+//Plan
+
+export async function fetchPlan() {
+    return await request("Plan");
+  }
+  
+  export async function updatePlan(recordId, updatedFields) {
+    const url = `Plan/${recordId}`;
+    return await request(url, {
+      method: "PATCH",
+      body: JSON.stringify({
+        fields: updatedFields,
+      }),
+    });
+  }
+  
+  export async function addPlan(newRecord) {
+    const url = `Plan`;
+    return await request(url, {
+      method: "POST",
+      body: JSON.stringify({
+        fields: newRecord,
+      }),
+    });
+  }
