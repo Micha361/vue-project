@@ -1,95 +1,8 @@
-<script>
-import { ref, onMounted } from "vue";
-import { fetchPlan, updatePlan, addPlan } from "../Api/request.js";
-
-export default {
-  setup() {
-    const days = [
-      "Montag",
-      "Dienstag",
-      "Mittwoch",
-      "Donnerstag",
-      "Freitag",
-      "Samstag",
-      "Sonntag",
-    ];
-    const timeSlots = ref([]);
-    const loading = ref(true);
-
-    async function loadPlan() {
-      loading.value = true;
-      try {
-        const data = await fetchPlan();
-        timeSlots.value = generateTimeSlotsWithActivities(data.records);
-        console.log("Plan geladen:", timeSlots.value);
-      } catch (error) {
-        console.error("Fehler beim Laden des Plans:", error);
-      } finally {
-        loading.value = false;
-      }
-    }
-
-    function generateTimeSlotsWithActivities(records) {
-      const times = Array.from({ length: 16 }, (_, index) => ({
-        time: `${String(8 + index).padStart(2, "0")}:00`,
-        activities: days.reduce((acc, day) => {
-          const record = records.find(
-            (r) =>
-              r.fields.Zeit === `${String(8 + index).padStart(2, "0")}` &&
-              r.fields.Tag === day
-          );
-          acc[day] = record
-            ? { id: record.id, Aktivität: record.fields.Aktivität || "" }
-            : { id: null, Aktivität: "" };
-          return acc;
-        }, {}),
-      }));
-      return times;
-    }
-
-    async function updateActivity(time, day, activity) {
-      const timeSlot = timeSlots.value.find((slot) => slot.time === time);
-      const activityObj = timeSlot.activities[day];
-
-      if (activityObj.id) {
-       
-        try {
-          await updatePlan(activityObj.id, { Aktivität: activity });
-          console.log("Aktivität aktualisiert:", { Aktivität: activity });
-        } catch (error) {
-          console.error("Fehler beim Aktualisieren der Aktivität:", error);
-        }
-      } else {
-       
-        try {
-          const newRecord = {
-            Zeit: time,
-            Tag: day,
-            Aktivität: activity || "",
-          };
-          const createdRecord = await addPlan(newRecord);
-          activityObj.id = createdRecord.id; 
-          console.log("Neuer Datensatz erstellt:", createdRecord);
-        } catch (error) {
-          console.error("Fehler beim Erstellen eines neuen Datensatzes:", error);
-        }
-      }
-    }
-
-    onMounted(() => {
-      loadPlan();
-    });
-
-    return { days, timeSlots, loading, updateActivity };
-  },
-};
-</script>
-
 <template>
   <div class="schedule-container">
     <h1 class="title">Trainingsplan</h1>
-    <div v-if="loading">Plan wird geladen...</div>
-    <table class="schedule-table" v-else>
+    <p>Bitte füge unten deine gewünsten Trainings ein.</p>
+    <table class="schedule-table">
       <thead>
         <tr>
           <th>Zeit</th>
@@ -97,13 +10,17 @@ export default {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="timeSlot in timeSlots" :key="timeSlot.time">
+        <tr v-for="(timeSlot, timeIndex) in timeSlots" :key="timeIndex">
           <td>{{ timeSlot.time }}</td>
-          <td v-for="day in days" :key="day" class="schedule-cell">
+          <td
+            v-for="(day, dayIndex) in days"
+            :key="dayIndex"
+            class="schedule-cell"
+          >
             <textarea
               class="activity-input"
-              v-model="timeSlot.activities[day].Aktivität"
-              @blur="updateActivity(timeSlot.time, day, timeSlot.activities[day].Aktivität)"
+              v-model="timeSlot.activities[day]"
+              @input="saveSchedule"
               placeholder="---"
             ></textarea>
           </td>
@@ -112,6 +29,39 @@ export default {
     </table>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      days: ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"],
+      timeSlots: [],
+    };
+  },
+  methods: {
+    loadSchedule() {
+      const savedSchedule = localStorage.getItem("schedule");
+      if (savedSchedule) {
+        this.timeSlots = JSON.parse(savedSchedule);
+      } else {
+        this.timeSlots = Array.from({ length: 16 }, (_, index) => ({
+          time: `${String(6 + index).padStart(2, "0")}:00 - ${String(7 + index).padStart(2, "0")}:00`,
+          activities: this.days.reduce((acc, day) => {
+            acc[day] = "";
+            return acc;
+          }, {}),
+        }));
+      }
+    },
+    saveSchedule() {
+      localStorage.setItem("schedule", JSON.stringify(this.timeSlots));
+    },
+  },
+  mounted() {
+    this.loadSchedule();
+  },
+};
+</script>
 
 <style scoped>
 .schedule-container {
@@ -132,6 +82,11 @@ export default {
   border-collapse: collapse;
 }
 
+.schedule-table thead {
+  background-color: #333;
+  color: #fff;
+}
+
 .schedule-table th,
 .schedule-table td {
   border: 1px solid #ddd;
@@ -140,12 +95,13 @@ export default {
 }
 
 .schedule-cell {
-  background-color: #242424;
-  transition: 0.3s ease;
+  background-color: #c9c9c9;
 }
 
 .schedule-cell:hover {
-  background-color: #3d3d3d;
+  cursor: pointer;
+  background-color: #c9c9c9;
+  background-color: #a0a0a0;
 }
 
 .activity-input {
@@ -154,6 +110,8 @@ export default {
   border: none;
   resize: none;
   font-size: 1rem;
+  padding: 5px;
+  box-sizing: border-box;
   background-color: transparent;
   text-align: center;
   font-family: Arial, sans-serif;
