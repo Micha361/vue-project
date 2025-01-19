@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { fetchUser, deleteUser, addUser, fetchRoles } from '../Api/request.js';
+import { fetchPerson, deletePerson, addPerson, fetchRoles } from '../Api/request.js';
 
-const users = ref([]);
+const Persons = ref([]);
 const roles = ref([]);
 const loading = ref(true);
 
-const newUser = ref({
-    UserName: '',
-    UserMail: '',
+const newPerson = ref({
+    PersonName: '',
+    PersonMail: '',
     fk_RoleId: '',
     StartDate: '',
     EndDate: ''
@@ -47,19 +47,19 @@ async function loadRoles() {
 async function load() {
     loading.value = true;
     try {
-        const data = await fetchUser();
+        const data = await fetchPerson();
         const rolesData = await fetchRoles();
         const rolesMap = Object.fromEntries(
             rolesData.records.map(role => [role.id, role.fields.Role])
         );
 
-        users.value = data.records
-            .filter(user => {
-                return user.fields.UserName &&
-                       user.fields.UserMail &&
-                       user.fields.fk_RoleId &&
-                       user.fields.StartDate &&
-                       user.fields.EndDate;
+        Persons.value = data.records
+            .filter(Person => {
+                return Person.fields.PersonName &&
+                       Person.fields.PersonMail &&
+                       Person.fields.fk_RoleId &&
+                       Person.fields.StartDate &&
+                       Person.fields.EndDate;
             })
             .map(record => ({
                 id: record.id,
@@ -69,7 +69,7 @@ async function load() {
                 }
             }));
 
-        console.log('Gefilterte Benutzerdaten mit Rollennamen:', users.value);
+        console.log('Gefilterte Benutzerdaten mit Rollennamen:', Persons.value);
     } catch (error) {
         console.error('Fehler beim Laden der Daten:', error);
     } finally {
@@ -80,31 +80,31 @@ async function load() {
 
 async function handleAdd() {
     if (
-        !newUser.value.UserName ||
-        !newUser.value.UserMail ||
-        !newUser.value.fk_RoleId ||
-        !newUser.value.StartDate ||
-        !newUser.value.EndDate
+        !newPerson.value.PersonName ||
+        !newPerson.value.PersonMail ||
+        !newPerson.value.fk_RoleId ||
+        !newPerson.value.StartDate ||
+        !newPerson.value.EndDate
     ) {
         alert('Bitte alle Felder korrekt ausfüllen.');
         return;
     }
 
-    const roleId = await getRoleId(newUser.value.fk_RoleId);
+    const roleId = await getRoleId(newPerson.value.fk_RoleId);
 
     if (!roleId) {
-        alert(`Rolle "${newUser.value.fk_RoleId}" nicht gefunden.`);
+        alert(`Rolle "${newPerson.value.fk_RoleId}" nicht gefunden.`);
         return;
     }
 
-    newUser.value.fk_RoleId = [roleId];
+    newPerson.value.fk_RoleId = [roleId];
 
     try {
-        await addUser(newUser.value);
+        await addPerson(newPerson.value);
         await load();
-        newUser.value = {
-            UserName: '',
-            UserMail: '',
+        newPerson.value = {
+            PersonName: '',
+            PersonMail: '',
             fk_RoleId: '',
             StartDate: '',
             EndDate: ''
@@ -114,12 +114,12 @@ async function handleAdd() {
     }
 }
 
-async function handleDelete(recordId, userName) {
+async function handleDelete(recordId, PersonName) {
     try {
-        const confirmed = confirm(`Möchtest du den Benutzer "${userName}" wirklich löschen?`);
+        const confirmed = confirm(`Möchtest du den Benutzer "${PersonName}" wirklich löschen?`);
         if (!confirmed) return;
 
-        await deleteUser(recordId);
+        await deletePerson(recordId);
         await load();
     } catch (error) {
         console.error('Fehler beim Löschen:', error);
@@ -128,7 +128,7 @@ async function handleDelete(recordId, userName) {
 </script>
 
 <template>
-  <h1>User Hinzufügen</h1>
+  <h1>Person Hinzufügen</h1>
   <div>
     <table class="styled-table">
       <thead>
@@ -143,24 +143,24 @@ async function handleDelete(recordId, userName) {
       </thead>
       <tbody>
         <tr>
-          <td><input v-model="newUser.UserName" placeholder="Name"></td>
-          <td><input v-model="newUser.UserMail" placeholder="Mail"></td>
+          <td><input v-model="newPerson.PersonName" placeholder="Name"></td>
+          <td><input v-model="newPerson.PersonMail" placeholder="Mail"></td>
           <td>
-            <select v-model="newUser.fk_RoleId">
+            <select v-model="newPerson.fk_RoleId">
               <option value="" disabled>Rolle</option>
               <option value="Coachee">Coachee</option>
               <option value="Coach">Coach</option>
               <option value="Owner">Owner</option>
             </select>
           </td>
-          <td><input v-model="newUser.StartDate" placeholder="StartDatum" type="date"></td>
-          <td><input v-model="newUser.EndDate" placeholder="EndDatum" type="date"></td>
+          <td><input v-model="newPerson.StartDate" placeholder="StartDatum" type="date"></td>
+          <td><input v-model="newPerson.EndDate" placeholder="EndDatum" type="date"></td>
           <td><button class="add-button" @click="handleAdd">Add</button></td>
         </tr>
       </tbody>
     </table>
 
-    <h1>Userliste</h1>
+    <h1>Personliste</h1>
     <div v-if="loading">Loading...</div>
     <table v-else class="styled-table">
       <thead>
@@ -175,17 +175,17 @@ async function handleDelete(recordId, userName) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="Person in Persons" :key="Person.id">
          
-          <td>{{ user.fields.UserName }}</td>
-          <td>{{ user.fields.UserMail }}</td>
-          <td>{{ user.fields.RoleName }}</td>
-          <td>{{ user.fields.StartDate }}</td>
-          <td>{{ user.fields.EndDate }}</td>
+          <td>{{ Person.fields.PersonName }}</td>
+          <td>{{ Person.fields.PersonMail }}</td>
+          <td>{{ Person.fields.RoleName }}</td>
+          <td>{{ Person.fields.StartDate }}</td>
+          <td>{{ Person.fields.EndDate }}</td>
           <td>
             <button 
               class="delete-button" 
-              @click="handleDelete(user.id, user.fields.UserName)">Delete</button>
+              @click="handleDelete(Person.id, Person.fields.PersonName)">Delete</button>
           </td>
         </tr>
       </tbody>

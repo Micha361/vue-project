@@ -26,28 +26,56 @@ class ValidationError {
         this.errors = errors;
     }
 }
+// Login
 
-// Users
-export async function fetchUser() {
-    const response = await request('users');
+
+export async function fetchUsers() {
+    const response = await request('benutzer'); 
+    if (!response) throw new Error('Benutzer konnten nicht geladen werden');
+    return response.records.map((record) => ({
+      id: record.id,
+      ...record.fields,
+    }));
+  }
+  
+  // Sign up
+  export async function addUser(user) {
+    const response = await request('benutzer', {
+      method: 'POST',
+      body: JSON.stringify({
+        fields: {
+          Name: user.Name,
+          Email: user.Email,
+          Passwort: user.Passwort,
+        },
+      }),
+    });
+    if (!response) throw new Error('Benutzer konnte nicht hinzugefügt werden');
+    return response;
+  }
+
+
+// Persons
+export async function fetchPerson() {
+    const response = await request('Person');
     console.log('Geladene Benutzer:', response);
     return response;
 }
 
-export async function deleteUser(recordId) {
-    const url = `users/${recordId}`;
+export async function deletePerson(recordId) {
+    const url = `Person/${recordId}`;
     const response = await request(url, { method: 'DELETE' });
     if (!response) throw new Error('Löschen fehlgeschlagen');
     console.log(`Benutzer mit ID ${recordId} gelöscht.`);
 }
 
-export async function addUser(newUser) {
-    const url = 'users';
-    console.log('Gesendete Daten:', JSON.stringify({ fields: newUser }));
+export async function addPerson(newPerson) {
+    const url = 'Person';
+    console.log('Gesendete Daten:', JSON.stringify({ fields: newPerson }));
     const response = await request(url, {
         method: 'POST',
         body: JSON.stringify({
-            fields: newUser,
+            fields: newPerson,
         }),
     });
     if (!response) throw new Error('Benutzer konnte nicht hinzugefügt werden');

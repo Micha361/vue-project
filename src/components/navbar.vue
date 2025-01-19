@@ -18,7 +18,7 @@ const toggleSidebar = () => {
       <nav>
         <ul>
           <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/users">Users</router-link></li>
+          <li><router-link to="/person">Person</router-link></li>
           <li><router-link to="/bills">Bills</router-link></li>
           <li><router-link to="/Tournament">Tournament</router-link></li>
           <li><router-link to="/Plan">Training-Plan</router-link></li>

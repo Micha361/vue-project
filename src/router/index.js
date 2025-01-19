@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
-import Users from '../views/users.vue'; 
+import Person from '../views/Person.vue'; 
 import Bills from '../views/bills.vue';
 import Tournament from '../views/Tournament.vue';
 import Plan from '../views/Plan.vue';
@@ -26,9 +26,9 @@ const routes = [
     meta: { requiresAuth: true }, 
   },
   {
-    path: '/users',
-    name: 'Users',
-    component: Users, 
+    path: '/Person',
+    name: 'Person',
+    component: Person, 
     meta: { requiresAuth: true },
   },
   {

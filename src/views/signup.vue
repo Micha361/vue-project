@@ -1,156 +1,148 @@
 <script setup>
-import navbarlogin from '../components/navbarlogin.vue';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { addUser } from "../Api/request.js"; 
+import navbarlogin from "../components/navbarlogin.vue";
+
+const username = ref("");
+const password = ref("");
+const passwordConfirm = ref("");
+const errorMessage = ref("");
+const router = useRouter();
+
+async function handleSignUp() {
+  if (password.value !== passwordConfirm.value) {
+    errorMessage.value = "Passwörter stimmen nicht überein!";
+    return;
+  }
+
+  try {
+    
+    const newUser = {
+      Name: username.value.split("@")[0], 
+      Email: username.value,
+      Passwort: password.value,
+    };
+
+    await addUser(newUser);
+
+
+    router.push("/login");
+  } catch (error) {
+    console.error("Fehler beim Erstellen des Benutzers:", error);
+    errorMessage.value = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
+  }
+}
 </script>
 
 <template>
   <navbarlogin />
-    <form class="form" @submit.prevent="handleLogin">
-      <span class="input-span">
-        <label for="email" class="label">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          v-model="username"
-          placeholder="Email wählen"
-        />
-      </span>
-      <span class="input-span">
-        <label for="password" class="label">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="password"
-          placeholder="Passwort wählen"
-        />
-      </span>
-      <span class="input-span">
-        <label for="password-confirm" class="label">Passwort bestätigen</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="password"
-          placeholder="Passwort wählen"
-        />
-      </span>
-      <input class="submit" type="submit" value="sign up" />
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      Du hast schon einen Account? <router-link class="link" to="/login">Sign in</router-link>
-    </form>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-        errorMessage: '',
-      };
-    },
-    methods: {
-      handleLogin() {
-        const validUsername = 'test@gmail.com';
-        const validPassword = '123';
-  
-        if (this.username === validUsername && this.password === validPassword) {
-          localStorage.setItem('loggedIn', 'true');
-          this.$router.push('/'); 
-        } else {
-          this.errorMessage = 'Ungültige Anmeldedaten!';
-        }
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .link {
-        text-decoration: none;
-        color: var(--clr);
-    }
+  <form class="form" @submit.prevent="handleSignUp">
+    <span class="input-span">
+      <label for="email" class="label">Email</label>
+      <input
+        type="email"
+        id="email"
+        v-model="username"
+        placeholder="Email eingeben"
+        required
+      />
+    </span>
+    <span class="input-span">
+      <label for="password" class="label">Passwort</label>
+      <input
+        type="password"
+        id="password"
+        v-model="password"
+        placeholder="Passwort eingeben"
+        required
+      />
+    </span>
+    <span class="input-span">
+      <label for="password-confirm" class="label">Passwort bestätigen</label>
+      <input
+        type="password"
+        id="password-confirm"
+        v-model="passwordConfirm"
+        placeholder="Passwort bestätigen"
+        required
+      />
+    </span>
+    <input class="submit" type="submit" value="Sign up" />
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    Du hast schon einen Account? <router-link class="link" to="/login">Sign in</router-link>
+  </form>
+</template>
 
-  .form {
-    --bg-light: #efefef;
-    --bg-dark: #707070;
-    --clr: #58bc82;
-    --clr-alpha: #9c9c9c60;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-  
-  .form .input-span {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .form input[type="email"],
-  .form input[type="password"] {
-    border-radius: 0.5rem;
-    padding: 1rem 0.75rem;
-    width: 100%;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: var(--clr-alpha);
-    outline: 2px solid var(--bg-dark);
-  }
-  
-  .form input[type="email"]:focus,
-  .form input[type="password"]:focus {
-    outline: 2px solid var(--clr);
-  }
-  
-  .label {
-    align-self: flex-start;
-    color: var(--clr);
-    font-weight: 600;
-  }
-  
-  .form .submit {
-    padding: 1rem 0.75rem;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 3rem;
-    background-color: var(--bg-dark);
-    color: var(--bg-light);
-    border: none;
-    cursor: pointer;
-    transition: all 300ms;
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-  
-  .form .submit:hover {
-    background-color: var(--clr);
-    color: var(--bg-dark);
-  }
-  
-  .span {
-    text-decoration: none;
-    color: var(--bg-dark);
-  }
-  
-  .span a {
-    color: var(--clr);
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: -10px;
-  }
-  </style>
-  
+<style scoped>
+
+.link {
+  text-decoration: none;
+  color: var(--clr);
+}
+
+.form {
+  --bg-light: #efefef;
+  --bg-dark: #707070;
+  --clr: #58bc82;
+  --clr-alpha: #9c9c9c60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.input-span {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+input[type="email"],
+input[type="password"] {
+  border-radius: 0.5rem;
+  padding: 1rem 0.75rem;
+  width: 100%;
+  border: none;
+  background-color: var(--clr-alpha);
+  outline: 2px solid var(--bg-dark);
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: 2px solid var(--clr);
+}
+
+.label {
+  align-self: flex-start;
+  color: var(--clr);
+  font-weight: 600;
+}
+
+.submit {
+  padding: 1rem 0.75rem;
+  width: 100%;
+  border-radius: 3rem;
+  background-color: var(--bg-dark);
+  color: var(--bg-light);
+  border: none;
+  cursor: pointer;
+  transition: all 300ms;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.submit:hover {
+  background-color: var(--clr);
+  color: var(--bg-dark);
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+}
+</style>
