@@ -25,10 +25,10 @@ import navbarlogin from '../components/navbarlogin.vue';
         placeholder="Passwort eingeben"
       />
     </span>
-    <span @click="forgot" class="span"><a href="#">Forgot password?</a></span>
+    <span @click="forgot" class="span"><a href="#">Passwort vergessen?</a></span>
     <input class="submit" type="submit" value="Log in" />
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-    Don't have an account? <router-link class="link" to="/signup">Sign up</router-link>
+    Du hast noch keinen Account? <router-link class="link" to="/signup">Sign up</router-link>
   </form>
 </template>
   

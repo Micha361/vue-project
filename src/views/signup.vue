@@ -26,7 +26,7 @@ import navbarlogin from '../components/navbarlogin.vue';
         />
       </span>
       <span class="input-span">
-        <label for="password-confirm" class="label">confirm Password</label>
+        <label for="password-confirm" class="label">Passwort bestätigen</label>
         <input
           type="password"
           name="password"
@@ -37,7 +37,7 @@ import navbarlogin from '../components/navbarlogin.vue';
       </span>
       <input class="submit" type="submit" value="sign up" />
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      Already have an account? <router-link class="link" to="/login">Sign in</router-link>
+      Du hast schon einen Account? <router-link class="link" to="/login">Sign in</router-link>
     </form>
   </template>
   
