@@ -113,9 +113,9 @@ async function togglePayed(recordId, currentStatus) {
       <thead>
         <tr>
           <th>Name</th>
-          <th>Amount</th>
+          <th>Anzahl</th>
           <th>DueDate</th>
-          <th>Payed</th>
+          <th>Bezahlt</th>
           <th>Add</th>
         </tr>
       </thead>
@@ -142,9 +142,9 @@ async function togglePayed(recordId, currentStatus) {
       <thead>
         <tr>
           <th>Name</th>
-          <th>Amount</th>
+          <th>Anzahl</th>
           <th>DueDate</th>
-          <th>Payed</th>
+          <th>Bezahlt</th>
           <th>Toggle Payed</th>
           <th>Delete</th>
         </tr>
