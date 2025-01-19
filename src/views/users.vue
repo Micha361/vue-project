@@ -4,7 +4,6 @@ import usertable from '../components/usertable.vue';
 
 <template>
     <div class="users-page">
-
       <usertable />
     </div>
   </template>

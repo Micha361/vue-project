@@ -4,10 +4,7 @@
 
 <template>
     <div class="users-page">
-
-
       <div class="users-page">
-  
   <usertable />
 </div>
     </div>

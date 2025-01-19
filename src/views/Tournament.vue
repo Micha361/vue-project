@@ -4,7 +4,6 @@ import Tournament from '../components/Tournament.vue';
 
 <template>
     <div class="users-page">
-
       <Tournament />
     </div>
   </template>
