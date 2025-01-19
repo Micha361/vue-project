@@ -22,7 +22,7 @@ onUnmounted(() => {
 <template>
   <div id="app">
     <div v-if="isSmallScreen" class="screen-warning">
-      <p>Diese Seite ist nicht für diese Bildschirmgröße geeignet.</p>
+      <p>Diese Seite ist nicht für diese Bildschirmgrösse geeignet.</p>
     </div>
     <div v-else>
       <Navbar v-if="isLoggedIn" />

@@ -4,58 +4,61 @@ import navbarlogin from '../components/navbarlogin.vue';
 
 <template>
   <navbarlogin />
-    <form class="form" @submit.prevent="handleLogin">
-      <span class="input-span">
-        <label for="email" class="label">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          v-model="username"
-          placeholder="Email eingeben"
-        />
-      </span>
-      <span class="input-span">
-        <label for="password" class="label">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="password"
-          placeholder="Passwort eingeben"
-        />
-      </span>
-      <span class="span"><a href="#">Forgot password?</a></span>
-      <input class="submit" type="submit" value="Log in" />
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      Don't have an account? <router-link class="link" to="/signup">Sign up</router-link>
-    </form>
-  </template>
+  <form class="form" @submit.prevent="handleLogin">
+    <span class="input-span">
+      <label for="email" class="label">Email</label>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        v-model="username"
+        placeholder="Email eingeben"
+      />
+    </span>
+    <span class="input-span">
+      <label for="password" class="label">Password</label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        v-model="password"
+        placeholder="Passwort eingeben"
+      />
+    </span>
+    <span @click="forgot" class="span"><a href="#">Forgot password?</a></span>
+    <input class="submit" type="submit" value="Log in" />
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    Don't have an account? <router-link class="link" to="/signup">Sign up</router-link>
+  </form>
+</template>
   
   <script>
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-        errorMessage: '',
-      };
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+      errorMessage: '',
+    };
+  },
+  methods: {
+    handleLogin() {
+      const validUsername = 'test@gmail.com';
+      const validPassword = '123';
+
+      if (this.username === validUsername && this.password === validPassword) {
+        localStorage.setItem('loggedIn', 'true');
+        this.$router.push('/'); 
+      } else {
+        this.errorMessage = 'Ungültige Anmeldedaten!';
+      }
     },
-    methods: {
-      handleLogin() {
-        const validUsername = 'test@gmail.com';
-        const validPassword = '123';
-  
-        if (this.username === validUsername && this.password === validPassword) {
-          localStorage.setItem('loggedIn', 'true');
-          this.$router.push('/'); 
-        } else {
-          this.errorMessage = 'Ungültige Anmeldedaten!';
-        }
-      },
-    },
-  };
-  </script>
+    forgot() {
+      alert("Bitte Kontaktieren sie die folgende Email Adresse: Arber_Idrizaj@sluz.ch");
+    }
+  },
+};
+</script>
   
   <style scoped>
   .link {
