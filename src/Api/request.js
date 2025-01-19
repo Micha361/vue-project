@@ -112,12 +112,20 @@ export async function addBill(newBill) {
         throw new Error('Ungültige Eingabedaten für Rechnung');
     }
 
+    newBill.DueDate = new Date(newBill.DueDate).toISOString().split('T')[0];
+
     const response = await request('Bill', {
         method: 'POST',
         body: JSON.stringify({
-            fields: newBill,
+            fields: {
+                Name: newBill.Name,
+                Amount: parseFloat(newBill.Amount), 
+                DueDate: newBill.DueDate,
+                payed: Boolean(newBill.payed), 
+            },
         }),
     });
+
     if (!response) throw new Error('Rechnung konnte nicht hinzugefügt werden');
     console.log('Neue Rechnung hinzugefügt:', response);
     return response;
